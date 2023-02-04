@@ -29,25 +29,28 @@ const qualSchema = new Schema({
         default : Date.now,
     },
 
-    // "created" "updated" "deleted" 로 구분
-    status : {
-        type : String
+    // 삭제됐을경우 - true
+    isDeleted : {
+        type : Boolean,
+        default : false
     },
 
-    // 글 작성자 아이디 (고유 objectId)
-    // userId : {
-    //     type : ObjectId,
-    //     required : true,
-    //     ref : 'User'
-    // },
-
-    // // 글 작성자 이름
+    // 글 작성자 이름
     username : {
         type : String,
-        required : true,
+        // required : true,
         ref : 'User'
     },
 
+    // 주전공
+    mainDept: {
+        type: String,
+    },
+
+    // 부전공
+    subDept: {
+        type: String
+    }
 
 }, {collection : '', versionKey : false});
 

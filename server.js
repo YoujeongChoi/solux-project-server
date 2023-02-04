@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-var { User } = require('./models/User'); 
+var { User } = require('./models/user'); 
 const { auth } = require("./middleware/auth");
 
 app.use(express.urlencoded({extended: true}));
@@ -51,14 +51,16 @@ app.use('/questions/comments', commentRouter);
 
 ////////////// api
 app.post("/register", (req, res) => {
-    const user = new User(req.body);
-  
-    user.save((err, user) => {
-      if (err) return res.json({ success: false, err });
-      return res.status(200).json({
+    var user = new User(req.body);
+    try {
+      const savedUser = user.save();
+      console.log("hihi", savedUser);
+      res.status(200).json({
         success: true
       });
-    });
+    } catch (err) {
+      res.status(500).json({ success: false, err });
+    }
   });
   
   
@@ -66,14 +68,13 @@ app.post("/register", (req, res) => {
   
   app.post("/login", (req, res) => {
     //로그인을할때 아이디와 비밀번호를 받는다
-    User.findOne({ email: req.body.email }, (err, user) => {
+    User.findOne({ id: req.body.id }, (err, user) => {
       if (err) {
         return res.json({
           loginSuccess: false,
           message: "존재하지 않는 아이디입니다.",
         });
       }
-      // 비밀번호 일치여부 확인 - isMatch : 일치
       user
         .comparePassword(req.body.password)
         .then((isMatch) => {
@@ -87,15 +88,19 @@ app.post("/register", (req, res) => {
           //해야될것: jwt 토큰 생성하는 메소드 작성
           user
             .generateToken()
-            // token을 쿠키에 저장
             .then((user) => {
-              res.cookie("x_auth", user.token).status(200).json({
+              res.cookie("x_auth", user.token, {
+                maxAge: 1000 * 60 * 60 * 24 * 7, // 7일간 유지
+                httpOnly: true,
+              }).status(200).json({
                 loginSuccess: true,
                 userId: user._id,
+                // path: 
               });
-            })
+            }) 
             .catch((err) => {
               res.status(400).send(err);
+              console.log("로그인에 실패하였습니다.");
             });
         })
         .catch((err) => res.json({ loginSuccess: false, err }));
@@ -111,11 +116,12 @@ app.post("/register", (req, res) => {
       _id: req._id,
       isAdmin: req.user.role === 09 ? false : true,
       isAuth: true,
-      email: req.user.email,
+      id: req.user.id,
       name: req.user.name,
-      lastname: req.user.lastname,
-      role: req.user.role,
-      image: req.user.image,
+      nickName: req.user.nickName,
+      number: req.user.number,
+  
+  
     });
   });
   

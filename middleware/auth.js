@@ -1,4 +1,4 @@
-var { User } = require("../models/User");
+var { User } = require("../models/user");
 
 // 인증처리
 let auth = (req, res, next) => {

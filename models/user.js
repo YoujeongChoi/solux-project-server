@@ -27,7 +27,7 @@ var userSchema = new Schema({
       type: String,
     },
     // 전공
-    dep: {
+    dept: {
       type: String,
       trim: true
     },
@@ -113,6 +113,5 @@ userSchema.statics.findByToken = function (token) {
 
 
 var User = mongoose.model("User", userSchema);
-module.exports = {User}
 
-// module.exports = mongoose.model("User", userSchema);
+module.exports = { User };

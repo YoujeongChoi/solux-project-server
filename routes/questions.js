@@ -6,7 +6,7 @@ const {auth} = require('../middleware/auth');
 // var User = require('../models/user');
 
 // 게시글 작성 - 권한필요
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const newPost = new Question(req.body);
     console.log(req.body);
     try {
@@ -66,7 +66,7 @@ router.delete("/:id", auth, async (req, res) => {
 
 
 // 특정 게시물 조회
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", async (req, res) => {
         Promise.all([
             Question.findOne({_id : req.params.id}).populate({path : 'userId', select : 'name'}),
             Comment.find({post : req.params.id}).sort('createdAt').populate({path : 'author', select : 'name'})

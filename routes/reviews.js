@@ -4,7 +4,7 @@ const Review = require('../models/review');
 const {auth} = require('../middleware/auth');
 
 // 게시글 작성 - 권한필요
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
     const newPost = new Review(req.body);
     console.log(req.body);
     try {

@@ -63,7 +63,7 @@ const commentSchema = new Schema({
         type : String,
         // required : true,
         ref : 'User'
-    },
+    }
 
 }, {collection : '', versionKey : false},  { toObject: { virtuals: true }, toJSON: { virtuals: true } },);
 

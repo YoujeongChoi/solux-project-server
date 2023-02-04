@@ -31,22 +31,26 @@ const questionSchema = new Schema({
     },
 
     // 삭제될경우 true
-    isDelete : {
+    isDeleted : {
         type : Boolean,
         default : false
     },
 
-    userId : {
-        type : mongoose.Schema.Types.ObjectId,
-        // required : true,
-        ref : 'User'
-    },
-
-    // // 글 작성자 이름
+    // 글 작성자 이름
     username : {
         type : String,
         // required : true,
         ref : 'User'
+    },
+
+    // 주전공
+    mainDept: {
+        type: String,
+    },
+
+    // 부전공
+    subDept: {
+        type: String
     }
 
 }, {collection : '', versionKey : false});
