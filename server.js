@@ -65,7 +65,7 @@ app.post("/register", (req, res) => {
 
 
 app.get("/user/:id", auth, (req, res) => {
-  User.findOne({id : req.params.id}, (err, result) => {
+  User.findOne({userId : req.params.id}, (err, result) => {
       if (result.id === req.user.id) {
         res.json(result);
       } else {
@@ -74,7 +74,6 @@ app.get("/user/:id", auth, (req, res) => {
   })
 }
 )
-  
 
 
 app.post("/checkId", (req, res) => {
@@ -87,7 +86,8 @@ app.post("/checkId", (req, res) => {
 })
 
 app.post("/checkUsername", (req, res) => {
-  User.findOne({id: req.body.name}, function(err, result){
+  User.findOne({name: req.body.name}, function(err, result){
+    console.log("name!!!!", req.body.name);
     if(err) return res.status(500).json({error: err});
 
     if(!result) return res.json({success: true});
@@ -95,12 +95,36 @@ app.post("/checkUsername", (req, res) => {
 })
 })
 
+app.put("/:id", async (req, res) => {
+
+  const user = await User.findById(req.params.id);
+  if (req.body._id === user) {
+      if (user.id === req.user.id) {
+          try {
+              user.id = id;
+              user.password = password;
+              user.name = nickName;
+              user.classof = classof;
+              user.dept = dept;
+
+              await user.save();
+              res.json(user);
   
+          } catch(err) {
+              res.status(500).json(err);
+          }
+          
+      } else {
+          res.status(401).json("수정 권한이 없습니다.")
+      }
+  }
+});
+
   // 3. login api
   
   app.post("/login", (req, res) => {
     //로그인을할때 아이디와 비밀번호를 받는다
-    User.findOne({ id: req.body.id }, (err, user) => {
+    User.findOne({ userId: req.body.userId }, (err, user) => {
       if (err) {
         return res.json({
           loginSuccess: false,

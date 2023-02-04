@@ -7,7 +7,7 @@ var { Schema } = require("mongoose");
 
 var userSchema = new Schema({
     // 아이디
-    id: {
+    userId: {
         type: String,
         trim: true,
         unique: 1

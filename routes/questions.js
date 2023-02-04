@@ -20,28 +20,28 @@ router.post("/", auth, async (req, res) => {
 
 // 게시글 수정
 router.put('/:id', auth, async (req, res) => {
-    try {
-    // 게시물 작성자 판단
-    const post = await Question.findById(req.params.id); 
-        // db에서 게시물 검색      
-        if(post.username === req.body.username) {
-          try { 
-              // 작성자 일치 확인
-              const updatedPost = Question.findByIdAndUpdate(req.params.id, {       
-                $set: req.body 
-              }, { new: true });
-                res.status(200).json(updatedPost);
-          } catch(err) {
-              res.status(500).json(err);
-          }
-      } else {
-          res.status(401).json("글 작성자만 수정 가능합니다.")
-      }
-    
-    } catch(err) {
-        res.status(500).json(err);
+    const post = await Question.findById((req.params.id)); 
+
+    if (post.username === req.user.name) {
+        try {
+            var date = new Date();
+            post.title = req.body.title;
+            console.log("title", req.body.title);
+            post.content = req.body.content;
+            console.log("content", req.body.content);
+            post.updatedAt = date;
+            console.log("date", date);
+
+            console.log("post", post);
+            await post.save();
+            res.json(post);
+        } catch(err) {
+            res.status(500).json(err);
+        }    
+    } else {
+        res.status(401).json("글 작성자만 수정 가능합니다.")
     }
-  });
+})
 
 
 // 게시물 삭제 - 권한필요
@@ -68,11 +68,14 @@ router.delete("/:id", auth, async (req, res) => {
 // 특정 게시물 조회
 router.get("/:id", async (req, res) => {
         Promise.all([
-            Question.findOne({_id : req.params.id}).populate({path : 'username', select : 'name'}),
-            Comment.find({post : req.params.id}).sort('createdAt').populate({path : 'author', select : 'name'})
+            Question.findOne({_id : req.params.id}).populate({path : 'username', populate : {path : "name"}}),
+            Comment.find({_id : req.params.id}).sort('createdAt').populate({path : 'author', populate : {path : "name"}}),
+
         ])
         .then (([post, comments]) => {
+
             return res.status(200).json({post, comments});
+            
         })
         .catch((err) => {
             console.log('err: ', err);

@@ -10,18 +10,18 @@ const commentSchema = new Schema({
         ref : 'Question',
         // require : true
     },
-    
-    // // 댓글 작성자
-    // author : {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'User',
-    //     // required: true,
-    // },
 
-    // 댓글작성자
+    // 댓글 작성자
     author : {
-        type :String
+        type: String,
+        ref: 'User',
+        // required: true,
     },
+
+    // // 댓글작성자
+    // author : {
+    //     type :String
+    // },
 
     parentComment: { // 1
         type: mongoose.Schema.Types.ObjectId,
