@@ -63,6 +63,38 @@ app.post("/register", (req, res) => {
     }
   });
   
+app.get("/checkId", (req, res) => {
+  var getId = req.body.id;
+  try {
+    if(User.findOne({id : getId})) {
+      res.json({
+        success: false
+      });
+    } else {
+      res.json({
+        success: true
+      }); }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
+app.get("/checkUsername", (req, res) => {
+  var getUsername = req.body.username;
+  try {
+
+    if(User.findOne({ name: getUsername})) {
+      res.json({
+        success: false
+      });
+    } else {
+      res.json({
+        success: true
+      }); }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
   
   // 3. login api
   

@@ -10,11 +10,17 @@ const commentSchema = new Schema({
         ref : 'Question',
         // require : true
     },
-    // 댓글 작성자
+    
+    // // 댓글 작성자
+    // author : {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    //     // required: true,
+    // },
+
+    // 댓글작성자
     author : {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        // required: true,
+        type :String
     },
 
     parentComment: { // 1
@@ -50,13 +56,6 @@ const commentSchema = new Schema({
         type : Boolean,
         default : false
     },
-
-    // 글 작성자 아이디 (고유 objectId)
-    // userId : {
-    //     type : ObjectId,
-    //     required : true,
-    //     ref : 'User'
-    // },
 
     // // 글 작성자 이름
     username : {

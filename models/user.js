@@ -17,7 +17,7 @@ var userSchema = new Schema({
         type: String,
         minlength: 4
     },
-    // 이름
+    // 닉네임
     name: {
       type: String,
       trim: true

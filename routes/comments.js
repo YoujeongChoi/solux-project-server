@@ -6,7 +6,7 @@ const Post = require('../models/question');
 // create
 router.post('/', checkPostId, function(req, res){ 
   var post = res.locals.post; // 1
-
+  
   req.body.post = post._id;       // 2
 
   Comment.create(req.body, function(err, comment){

@@ -4,7 +4,6 @@ var Qual = require('../models/qual');
 const {auth} = require('../middleware/auth');
 
 
-
 // 게시글 작성 - 권한필요
 router.post("/", auth, async (req, res) => {
     const newPost = new Qual(req.body);
