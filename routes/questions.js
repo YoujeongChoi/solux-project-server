@@ -22,7 +22,7 @@ router.post("/", auth, async (req, res) => {
 router.put('/:id', auth, async (req, res) => {
     try {
     // 게시물 작성자 판단
-    const post = await Question.findById(req.params.id);  
+    const post = await Question.findById(req.params.id); 
         // db에서 게시물 검색      
         if(post.username === req.body.username) {
           try { 
@@ -68,7 +68,7 @@ router.delete("/:id", auth, async (req, res) => {
 // 특정 게시물 조회
 router.get("/:id", async (req, res) => {
         Promise.all([
-            Question.findOne({_id : req.params.id}).populate({path : 'userId', select : 'name'}),
+            Question.findOne({_id : req.params.id}).populate({path : 'username', select : 'name'}),
             Comment.find({post : req.params.id}).sort('createdAt').populate({path : 'author', select : 'name'})
         ])
         .then (([post, comments]) => {

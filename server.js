@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-var { User } = require('./models/user'); 
+var { User }  = require('./models/user'); 
 const { auth } = require("./middleware/auth");
 
 app.use(express.urlencoded({extended: true}));
@@ -62,39 +62,39 @@ app.post("/register", (req, res) => {
       res.status(500).json({ success: false, err });
     }
   });
+
+
+app.get("/user/:id", auth, (req, res) => {
+  User.findOne({id : req.params.id}, (err, result) => {
+      if (result.id === req.user.id) {
+        res.json(result);
+      } else {
+        res.status(300).json("접근 권한이 없습니다.");
+      }
+  })
+}
+)
   
-app.get("/checkId", (req, res) => {
-  var getId = req.body.id;
-  try {
-    if(User.findOne({id : getId})) {
-      res.json({
-        success: false
-      });
-    } else {
-      res.json({
-        success: true
-      }); }
-  } catch (err) {
-    res.status(500).json(err);
-  }
+
+
+app.post("/checkId", (req, res) => {
+  User.findOne({id: req.body.id}, function(err, result){
+    if(err) return res.status(500).json({error: err});
+
+    if(!result) return res.json({success: true});
+    if(result) return res.json({success:false});
+})
 })
 
-app.get("/checkUsername", (req, res) => {
-  var getUsername = req.body.username;
-  try {
+app.post("/checkUsername", (req, res) => {
+  User.findOne({id: req.body.name}, function(err, result){
+    if(err) return res.status(500).json({error: err});
 
-    if(User.findOne({ name: getUsername})) {
-      res.json({
-        success: false
-      });
-    } else {
-      res.json({
-        success: true
-      }); }
-  } catch (err) {
-    res.status(500).json(err);
-  }
+    if(!result) return res.json({success: true});
+    if(result) return res.json({success:false});
 })
+})
+
   
   // 3. login api
   

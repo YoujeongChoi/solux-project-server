@@ -35,7 +35,7 @@ const questionSchema = new Schema({
         type : Boolean,
         default : false
     },
-
+    
     // 글 작성자 이름
     username : {
         type : String,
